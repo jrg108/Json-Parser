@@ -10,7 +10,7 @@ NumValue::NumValue()
 
 NumValue::NumValue(std::string input)
 {
-	internalNumber = std::stoi(input);
+	internalNumber = std::stof(input);
 }
 
 int NumValue::getWeight()
@@ -20,5 +20,5 @@ int NumValue::getWeight()
 
 void NumValue::display(int tabCount)
 {
-
+	std::cout << internalNumber;
 }

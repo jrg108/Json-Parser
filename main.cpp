@@ -19,10 +19,19 @@ int main(int argc, char* argv[])
 		file.open(argv[1]);
 		while (getline(file, line))
 		{
-			input = input + " ";
+			input = input + line + " ";
 		}
 		JsonObject* document = new JsonObject(input.substr(1, input.size() - 2));
-		//jsonParse(input, document);
+		try 
+		{
+			document->display(0);
+			std::cout << "Weight: " << document->getWeight() << endl;
+		}
+		catch(int e)
+		{
+			std::cout << "File not in correct JSON format" << endl;
+		}
+		
 	}
 	
 

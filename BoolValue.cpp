@@ -20,5 +20,9 @@ int BoolValue::getWeight()
 
 void BoolValue::display(int tabCount)
 {
-
+	if(internalBool)
+		std::cout << "true";
+	else
+		std::cout << "false";
+	
 }

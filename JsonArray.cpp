@@ -3,18 +3,15 @@
 #include <vector>
 #include <cctype>
 #include <cstring>
+#include "JsonArray.h"
 #include "JsonObject.h"
 #include "StringValue.h"
 #include "NumValue.h"
 #include "BoolValue.h"
 #include "NullValue.h"
-#include "JsonArray.h"
 
-
-
-JsonObject::JsonObject(std::string input)
+JsonArray::JsonArray(std::string input)
 {
-
 	for (int i = 0; i < input.size(); i++)
 	{
 		if (input[i] == '"')
@@ -25,10 +22,7 @@ JsonObject::JsonObject(std::string input)
 				if (input[i] == '"' && input[i - 1] != '\\')
 					break;
 			}
-			if (strings.size() == values.size())
-				strings.push_back(new StringValue(input.substr(start + 1, i - start - 1)));
-			else
-				values.push_back(new StringValue(input.substr(start + 1, i - start - 1)));
+			values.push_back(new StringValue(input.substr(start + 1, i - start - 1)));
 		}
 		else if (input[i] == '{')
 		{
@@ -39,13 +33,13 @@ JsonObject::JsonObject(std::string input)
 			while (leftBrakets != rightBrakets)
 			{
 				++i;
-					
+
 				if (input[i] == '{' && !insideQuotations)
 					leftBrakets++;
 				else if (input[i] == '}' && !insideQuotations)
 					rightBrakets++;
 				//also must make sure previous symbol is not \ or else this quotation is not the start or end of a string
-				else if (input[i] == '"' && input[i-1] != '\\')
+				else if (input[i] == '"' && input[i - 1] != '\\')
 				{
 					if (insideQuotations)
 						insideQuotations = false;
@@ -83,7 +77,7 @@ JsonObject::JsonObject(std::string input)
 		else if (std::isdigit(input[i]))
 		{
 			std::string temp;
-			while (std::isdigit(input[i]) || input[i] == '.' )
+			while (std::isdigit(input[i]) || input[i] == '.')
 			{
 				temp += input[i];
 				i++;
@@ -104,13 +98,13 @@ JsonObject::JsonObject(std::string input)
 		}
 	}
 }
-JsonObject::JsonObject()
+JsonArray::JsonArray()
 {
 
 }
 
 
-int JsonObject::getWeight()
+int JsonArray::getWeight()
 {
 	int weight = 1;
 	for (int i = 0; i < values.size(); i++)
@@ -121,24 +115,21 @@ int JsonObject::getWeight()
 	return weight;
 }
 
-void JsonObject::display(int tabCount = 0)
+void JsonArray::display(int tabCount = 0)
 {
 	std::cout << std::endl;
 	for (int i = 0; i < tabCount; i++)
 		std::cout << " ";
-	std::cout << "{";
+	std::cout << "[";
 	tabCount++;
-	for (int i = 0; i < strings.size(); i++)
+	for (int i = 0; i < values.size(); i++)
 	{
-		strings[i]->display(tabCount);
-		std::cout << " : ";
 		values[i]->display(tabCount);
-		if (i < strings.size() - 1)
-			std::cout << ", " << std::endl << " ";
+		if (i < values.size() - 1)
+			std::cout << ", ";
 	}
 	for (int i = 0; i < tabCount - 1; i++)
 		std::cout << " ";
-	std::cout << "}";
+	std::cout << "]";
 	std::cout << std::endl;
-	
 }
